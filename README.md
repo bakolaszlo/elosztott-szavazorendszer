@@ -1,0 +1,1 @@
+# elosztott-szavazorendszer
