@@ -103,7 +103,7 @@ nav a:first-of-type {
   }
 
   nav {
-    text-align: left;
+    text-align: center;
     margin-left: -1rem;
     font-size: 1rem;
 

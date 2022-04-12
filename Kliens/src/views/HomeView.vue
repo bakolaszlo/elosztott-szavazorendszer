@@ -1,6 +1,5 @@
 <script setup>
 import TheWelcome from "@/components/TheWelcome.vue";
-import BarChart from "@/components/display.vue";
 </script>
 
 <template>
@@ -12,7 +11,6 @@ import BarChart from "@/components/display.vue";
 <script>
 export default {
   components: {
-    BarChart,
     TheWelcome,
   },
 };
