@@ -1,4 +1,6 @@
-﻿using Npgsql;
+﻿using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using Osztott_szavazasi_rendszer.Data;
 
 namespace Osztott_szavazasi_rendszer
 {
@@ -38,5 +40,15 @@ namespace Osztott_szavazasi_rendszer
             };
             return builder.ToString();
         }
+
+        public static void ApplyMigrations()
+        {
+            using var context = new AppDbContext();
+            Console.WriteLine("Start migrating.");
+            context.Database.Migrate();
+            Console.WriteLine("DB migrated.");
+        }
     }
+
+    
 }
