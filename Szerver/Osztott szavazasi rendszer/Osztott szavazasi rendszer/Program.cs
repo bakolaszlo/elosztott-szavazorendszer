@@ -23,6 +23,7 @@ catch (Exception ex)
 }
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -42,5 +43,6 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.MapControllers();
+app.MapHub<VoteHub>("/votehub");
 
 app.Run();
