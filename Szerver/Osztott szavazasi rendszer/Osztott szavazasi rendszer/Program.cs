@@ -13,6 +13,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
+try
+{
+    StartupHelper.ApplyMigrations();
+}
+catch (Exception ex)
+{
+    throw new Exception("Failed to apply migrations. Stopping service.", ex);
+}
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
