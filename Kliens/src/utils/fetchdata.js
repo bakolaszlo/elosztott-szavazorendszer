@@ -16,8 +16,5 @@ export function DeleteData(params) {}
 export function UpdateData(params) {}
 
 export function SubmitForm(data) {
-  fetch(api + "SubmittedForms", data)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+  return fetch(api + "SubmittedForms", data);
 }
