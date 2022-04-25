@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Osztott_szavazasi_rendszer.Data;
 using Osztott_szavazasi_rendszer.Models;
@@ -16,10 +17,12 @@ namespace Osztott_szavazasi_rendszer.Controllers
     public class SubmittedFormsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IHubContext<VoteHub> hubContext;
 
-        public SubmittedFormsController(AppDbContext context)
+        public SubmittedFormsController(AppDbContext context, IHubContext<VoteHub> hubContext)
         {
             _context = context;
+            this.hubContext = hubContext;
         }
 
         // GET: api/SubmittedForms
@@ -94,6 +97,7 @@ namespace Osztott_szavazasi_rendszer.Controllers
         public async Task<ActionResult<SubmittedForm>> PostSubmittedForm(SubmittedForm submittedForm)
         {
             _context.SubmittedForms.Add(submittedForm);
+            hubContext.Clients.All.SendAsync("UpdateVote", submittedForm, submittedForm.FormId);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetSubmittedForm", new { id = submittedForm.Id }, submittedForm);

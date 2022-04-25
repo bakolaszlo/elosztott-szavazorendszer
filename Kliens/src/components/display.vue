@@ -1,25 +1,32 @@
 <template>
-  <div class="wrapper" v-if="isLoaded">
-    <Bar :chart-data="chartData"> </Bar>
-  </div>
-  <div>A következő emberek szavaztak:</div>
-  <table class="table table-bordered table-striped">
-    <tbody>
-      <tr v-for="item in voters" :key="item">
-        <td>
-          {{ item[0] }}
-        </td>
-        <td>
-          {{ item[1] }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <Transition>
+    <div class="wrapper" v-if="isLoaded">
+      <Bar :chart-data="chartData"> </Bar>
+    </div>
+  </Transition>
+  <Transition>
+    <div class="result-table-wrapper" v-if="isLoaded">
+      <div>A következő emberek szavaztak:</div>
+      <table class="table table-bordered table-striped">
+        <tbody>
+          <tr v-for="item in voters" :key="item">
+            <td>
+              {{ item[0] }}
+            </td>
+            <td>
+              {{ item[1] }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </Transition>
 </template>
 
 <script>
 import { Bar } from "vue-chartjs";
 import "bootstrap";
+import "../assets/transition.css";
 
 import {
   Chart as ChartJS,
@@ -32,6 +39,7 @@ import {
 } from "chart.js";
 import { GetData } from "../utils/fetchdata";
 import { track } from "@vue/reactivity";
+import * as signalR from "@microsoft/signalr";
 
 ChartJS.register(
   Title,
@@ -47,7 +55,7 @@ export default {
     Bar,
   },
   data: () => ({
-    isLoaded: true,
+    isLoaded: false,
     chartData: {
       labels: ["Igen", "Nem", "Passz"],
       datasets: [
@@ -104,6 +112,27 @@ export default {
       "SubmittedForms/formId/" + this.$route.params.formId
     );
     this.parseData();
+    this.isLoaded = true;
+    var connection = new signalR.HubConnectionBuilder()
+      .withUrl("/votehub")
+      .build();
+
+    connection
+      .start()
+      .then(function () {
+        console.log("Connection established..");
+      })
+      .catch(function (err) {
+        return console.error(err.toString());
+      });
+
+    connection.on("UpdateVote", (rawData, formId) => {
+      if (formId != this.$route.params.formId) {
+        return;
+      }
+      this.rawData.push(rawData);
+      this.parseData();
+    });
   },
 };
 </script>
