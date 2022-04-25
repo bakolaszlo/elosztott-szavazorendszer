@@ -1,10 +1,29 @@
 <template>
   <div class="szavazz">
-    <h1>This is a voting page</h1>
+    <h1>{{formData}}</h1>
   </div>
+  <button>
+    Send
+  </button>
 </template>
-<script>
+<script>import { GetData } from "../utils/fetchdata";
 
+export default {
+  data() {
+    return {
+      formData: null,
+    }
+  },
+  async created() {
+    this.formData = await GetData("forms/"+this.$route.params.formId);
+    console.log(this.formData)
+  },
+  methods: {
+    GetForm(){
+      
+    }
+  },
+}
 </script>
 <style>
 @media (min-width: 1024px) {
