@@ -1,9 +1,6 @@
 <template>
   <div class="szavazz">
-    <h1>{{ formData }}</h1>
-    "Hello"
-
-    <FormKit type="form" help="Válasz beküldése" @submit="handleForm">
+    <FormKit v-if="loaded" type="form" help="Válasz beküldése" @submit="handleForm">
       <FormKit
         type="text"
         label="Neved:"
@@ -29,11 +26,13 @@ export default {
   data() {
     return {
       formData: null,
+      loaded: false,
     };
   },
   async created() {
     this.formData = await GetData("forms/" + this.$route.params.formId);
     console.log(this.formData);
+    this.loaded=true;
   },
   methods: {
     handleForm() {
