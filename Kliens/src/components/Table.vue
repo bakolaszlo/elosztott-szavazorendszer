@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Loop through the list get the each student data -->
+        <!-- Loop through the list get the each form data -->
         <tr v-for="item in tableData" :key="item">
           <td>
             <RouterLink :to="'/szavazz/' + item.id">
