@@ -18,6 +18,7 @@
 import { GetData } from "../utils/fetchdata";
 import "bootstrap";
 import Table from "../components/Table.vue";
+import "../assets/transition.css";
 
 export default {
   data() {
@@ -60,14 +61,5 @@ export default {
     display: flex;
     align-items: center;
   }
-}
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
 }
 </style>
