@@ -33,7 +33,7 @@ namespace Osztott_szavazasi_rendszer.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     User = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
                     FormId = table.Column<int>(type: "integer", nullable: false),
                     Answers = table.Column<List<string>>(type: "text[]", nullable: false),
                     Comments = table.Column<string>(type: "text", nullable: true)

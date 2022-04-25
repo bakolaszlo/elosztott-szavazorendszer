@@ -1,6 +1,6 @@
 <template>
-<div class="wrapper">
-  <Bar :chart-data="chartData"> </Bar>
+  <div class="wrapper">
+    <Bar :chart-data="chartData"> </Bar>
   </div>
 </template>
 
@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style scoped>
-.wrapper{
-  margin-top:150px;
+.wrapper {
+  margin-top: 150px;
 }
 </style>

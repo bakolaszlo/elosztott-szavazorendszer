@@ -28,24 +28,36 @@ builder.Services.AddSignalR();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSpaStaticFiles(configuration =>
+ {
+     configuration.RootPath = "wwwroot";
+ });
 
-var app = builder.Build();
+ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseCors(
-options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+    options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
 );
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.UseDefaultFiles();
 app.UseStaticFiles();
+app.UseSpaStaticFiles();
+app.UseRouting();
 
-app.MapControllers();
-app.MapHub<VoteHub>("/votehub");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<VoteHub>("/votehub");
+});
+
+app.UseSpa(spa =>
+{
+    spa.Options.SourcePath = "wwwroot";
+});
 app.Run();
