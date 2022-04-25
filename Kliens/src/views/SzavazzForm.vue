@@ -1,30 +1,35 @@
 <template>
   <div class="szavazz">
-    <FormKit
-      v-if="loaded"
-      type="form"
-      help="Válasz beküldése"
-      @submit="handleForm"
-    >
-      <FormKit
-        type="text"
-        label="Neved:"
-        v-model="name"
-        validation="required"
-      />
-      <FormKit
-        v-model="value"
-        type="radio"
-        :label="formData.questions[0]"
-        :options="['Igen', 'Nem', 'Passz']"
-        help="Kérem válasszon ki egyet!"
-        validation="required"
-      />
-    </FormKit>
+    <Transition>
+      <div v-if="loaded">
+        <FormKit
+          v-if="loaded"
+          type="form"
+          help="Válasz beküldése"
+          @submit="handleForm"
+        >
+          <FormKit
+            type="text"
+            label="Neved:"
+            v-model="name"
+            validation="required"
+          />
+          <FormKit
+            v-model="value"
+            type="radio"
+            :label="formData.questions[0]"
+            :options="['Igen', 'Nem', 'Passz']"
+            help="Kérem válasszon ki egyet!"
+            validation="required"
+          />
+        </FormKit>
+      </div>
+    </Transition>
   </div>
 </template>
 <script>
 import { GetData, SubmitForm } from "../utils/fetchdata";
+import "../assets/transition.css";
 
 export default {
   props: ["formId"],
