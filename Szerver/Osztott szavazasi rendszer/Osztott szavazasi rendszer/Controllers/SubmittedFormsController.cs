@@ -43,6 +43,20 @@ namespace Osztott_szavazasi_rendszer.Controllers
             return submittedForm;
         }
 
+        // GET: api/SubmittedForms/5
+        [HttpGet("formId/{id}")]
+        public ActionResult<IEnumerable<SubmittedForm>> GetSubmittedFormsById(int id)
+        {
+            var submittedForm = _context.SubmittedForms.Where(obj => obj.FormId == id);
+
+            if (submittedForm == null)
+            {
+                return NotFound();
+            }
+
+            return submittedForm.ToArray();
+        }
+
         // PUT: api/SubmittedForms/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
