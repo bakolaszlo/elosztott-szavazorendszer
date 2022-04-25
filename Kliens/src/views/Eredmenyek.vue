@@ -1,6 +1,11 @@
 <template>
   <div class="eredmenyek">
-    <h1>This is an about page</h1>
+    <div class="container text-center mt-5 mb-5">
+      <h1 class="mt-5 fw-bolder text-success">Az eddigi eredmények:</h1>
+      <div class="table-responsive my-5">
+        <!-- <Table v-if="loaded" :fields="fields" :tableData="formData"></Table> -->
+      </div>
+    </div>
   </div>
 </template>
 
