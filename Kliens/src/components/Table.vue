@@ -44,7 +44,6 @@ export default {
     return {};
   },
   mounted() {
-    console.log(this.tableData, this.fields);
   },
 };
 </script>
