@@ -1,11 +1,13 @@
 <template>
   <div class="szavazz">
-    <div class="container text-center mt-5 mb-5">
-      <h1 class="mt-5 fw-bolder text-success">Az eddigi kérdések:</h1>
-      <div class="table-responsive my-5">
-        <Table v-if="loaded" :fields="fields" :tableData="formData"></Table>
+    <Transition>
+      <div class="container text-center mt-5 mb-5" v-if="loaded">
+        <h1 class="mt-5 fw-bolder text-success">Az eddigi kérdések:</h1>
+        <div class="table-responsive my-5">
+          <Table :fields="fields" :tableData="formData"></Table>
+        </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
 <script>
@@ -54,5 +56,14 @@ export default {
     display: flex;
     align-items: center;
   }
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
