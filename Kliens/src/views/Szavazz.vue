@@ -1,6 +1,19 @@
 <template>
   <div class="szavazz">
     <h1>{{formData}}</h1>
+    
+    
+  <FormKit
+    type="form"
+    help="Válasz beküldése">
+    <FormKit
+  v-model="value"
+  type="radio"
+  label="Insert kérdés here"
+  :options="['Igen','Nem','Passz']"
+  help="Kérem válasszon ki egyet!"/>
+  
+    </FormKit>
   </div>
   <button>
     Send
