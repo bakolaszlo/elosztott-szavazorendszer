@@ -1,11 +1,11 @@
 <template>
   <Transition>
-    <div class="wrapper" v-if="isLoaded">
+    <div class="wrapper" v-if="isLoaded && !textForm">
       <Bar :chart-data="chartData"> </Bar>
     </div>
   </Transition>
   <Transition>
-    <div class="result-table-wrapper" v-if="isLoaded">
+    <div class="result-table-wrapper" v-if="isLoaded && !textForm">
       <div>A következő emberek szavaztak:</div>
       <table class="table table-bordered table-striped">
         <tbody>
@@ -15,6 +15,23 @@
             </td>
             <td>
               {{ item[1] }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </Transition>
+  <Transition>
+    <div class="result-table-wrapper" v-if="isLoaded && textForm">
+      <div>A következő emberek küldtek választ:</div>
+      <table class="table table-bordered table-striped">
+        <tbody>
+          <tr v-for="user in rawData" :key="user">
+            <td>
+              {{ user["user"] }}
+            </td>
+            <td>
+              {{ user["answers"].join("") }}
             </td>
           </tr>
         </tbody>
@@ -72,23 +89,20 @@ export default {
     },
     rawData: null,
     voters: null,
+    possibleAnswers: null,
+    formData: null,
+    textForm: false,
   }),
   methods: {
     parseData() {
-      //Igen
-      this.chartData.datasets[0].data[0] = this.rawData.filter(
-        (obj) => obj.answers[0] === "Igen"
-      ).length;
+      this.chartData.labels = this.formData.answers[0].split(", ");
 
-      // Nem
-      this.chartData.datasets[0].data[1] = this.rawData.filter(
-        (obj) => obj.answers[0] === "Nem"
-      ).length;
+      for (let index = 0; index < this.chartData.labels.length; index++) {
+        this.chartData.datasets[0].data[index] = this.rawData.filter((obj) =>
+          obj.answers[0].includes(this.chartData.labels[index])
+        ).length;
+      }
 
-      //Passz
-      this.chartData.datasets[0].data[2] = this.rawData.filter(
-        (obj) => obj.answers[0] === "Passz"
-      ).length;
       let trackObj = {};
       this.rawData.forEach((cur) => {
         if (trackObj[cur.user] === undefined) {
@@ -111,6 +125,12 @@ export default {
     this.rawData = await GetData(
       "SubmittedForms/formId/" + this.$route.params.formId
     );
+    this.formData = await GetData("Forms/" + this.$route.params.formId);
+    console.log("Form data", this.formData);
+    console.log("Results Data", this.rawData);
+    if (this.formData.questionTypes[0] == 2) {
+      this.textForm = true;
+    }
     this.parseData();
     this.isLoaded = true;
     var connection = new signalR.HubConnectionBuilder()

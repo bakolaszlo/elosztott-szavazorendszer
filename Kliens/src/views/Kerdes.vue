@@ -111,7 +111,12 @@ export default {
         console.log(element, index, this.answerCounter);
         answers.push(element);
       }
-      return [answers.join(", ")];
+      answers = answers.join(", ");
+      if (answers.length > 0) {
+        return [answers];
+      } else {
+        return ["Igen, Nem, Passz"];
+      }
     },
     handleForm() {
       if (this.value.length == 0) {

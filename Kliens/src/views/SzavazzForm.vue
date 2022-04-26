@@ -95,13 +95,21 @@ export default {
           break;
       }
     },
+    prepareAnswers() {
+      try {
+        return this.value.join(", ");
+      } catch {
+        return this.value;
+      }
+    },
     handleForm() {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
+      let answers = this.prepareAnswers();
       var raw = JSON.stringify({
         user: this.name,
         formId: this.$route.params.formId,
-        answers: [this.value],
+        answers: [answers],
       });
 
       var requestOptions = {
