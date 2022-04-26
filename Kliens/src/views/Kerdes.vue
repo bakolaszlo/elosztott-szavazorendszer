@@ -5,7 +5,7 @@
         <FormKit
           v-if="loaded"
           type="form"
-          help="Válasz beküldése"
+          help="Kérdés beküldése"
           @submit="handleForm"
         >
           <FormKit
@@ -13,7 +13,7 @@
             type="text"
             label="Adja meg a kérdését"
             help="Irja be a kérdést!"
-            validation="required"
+            validation="required|length:1,60"
           />
         </FormKit>
       </div>
@@ -29,9 +29,7 @@
     <Transition>
       <h1 class="succes" v-if="showSuccesfullMessage && !loaded">
         Sikeresen regisztráltuk a kérdést. <br />
-        <Router-link :to="'/eredmenyek/' + $route.params.formId"
-          >Itt</Router-link
-        >
+        <Router-link :to="'/eredmenyek/' + formId">Itt</Router-link>
         követheti az eredményeket.
       </h1>
     </Transition>
@@ -43,7 +41,7 @@
   </div>
 </template>
 <script>
-import { GetData, PushData} from "../utils/fetchdata";
+import { PushData } from "../utils/fetchdata";
 import "../assets/transition.css";
 import "../assets/loading.css";
 
@@ -57,11 +55,10 @@ export default {
       submitSuccess: false,
       showSuccesfullMessage: false,
       showErrorMessage: false,
+      formId: 0,
     };
   },
   async created() {
-    this.formData = await GetData("forms/" + this.$route.params.formId);
-    console.log(this.formData);
     this.loaded = true;
   },
   methods: {
@@ -70,7 +67,7 @@ export default {
       myHeaders.append("Content-Type", "application/json");
       var raw = JSON.stringify({
         questions: [this.value],
-        questionTypes: []
+        questionTypes: [],
       });
 
       var requestOptions = {
@@ -86,8 +83,10 @@ export default {
       }, 500);
 
       PushData(requestOptions)
-        .then((response) => response.text())
+        .then((response) => response.json())
         .then((result) => {
+          console.log(result);
+          this.formId = result.id;
           setTimeout(() => {
             this.submitSuccess = true;
           }, 2000);

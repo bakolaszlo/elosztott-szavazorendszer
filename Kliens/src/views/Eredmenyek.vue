@@ -36,10 +36,12 @@ export default {
   methods: {
     parseFormData() {
       let formCopy = this.formData;
+      console.log(this.formData);
       for (let index = 0; index < this.formData.length; index++) {
         const element = this.formData[index];
-        element.questions = element.questions[0];
-        element.answers = element.answers[0];
+        try {
+          element.questions = element.questions[0];
+        } catch {}
       }
       console.log(this.formData);
     },

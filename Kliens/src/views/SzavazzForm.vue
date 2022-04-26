@@ -12,7 +12,7 @@
             type="text"
             label="Neved:"
             v-model="name"
-            validation="required"
+            validation="required|length:1,30"
           />
           <FormKit
             v-model="value"
