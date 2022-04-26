@@ -59,7 +59,9 @@ export default {
     };
   },
   async created() {
-    this.loaded = true;
+    setTimeout(() => {
+      this.loaded = true;
+    }, 500);
   },
   methods: {
     handleForm() {
