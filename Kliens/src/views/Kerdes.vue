@@ -131,7 +131,7 @@ export default {
           questionType = 3;
           break;
         default:
-          questionType = 0;
+          questionType = 3;
           break;
       }
       let answers = this.GetAnswers();

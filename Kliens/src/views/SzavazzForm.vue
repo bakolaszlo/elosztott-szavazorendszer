@@ -16,9 +16,9 @@
           />
           <FormKit
             v-model="value"
-            type="radio"
+            :type="questionType"
             :label="formData.questions[0]"
-            :options="['Igen', 'Nem', 'Passz']"
+            :options="possibleAnswers"
             help="Kérem válasszon ki egyet!"
             validation="required"
           />
@@ -64,14 +64,37 @@ export default {
       submitSuccess: false,
       showSuccesfullMessage: false,
       showErrorMessage: false,
+      possibleAnswers: ["Igen", "Nem", "Passz"],
     };
   },
   async created() {
     this.formData = await GetData("forms/" + this.$route.params.formId);
     console.log(this.formData);
+    this.prepareData();
     this.loaded = true;
   },
   methods: {
+    prepareData() {
+      try {
+        this.possibleAnswers = this.formData.answers[0].split(", ");
+      } catch {
+        this.possibleAnswers = ["Igen", "Nem", "Passz"];
+      }
+      if (this.possibleAnswers.length == 1) {
+        this.possibleAnswers = ["Igen", "Nem", "Passz"];
+      }
+      switch (this.formData.questionTypes[0]) {
+        case 1:
+          this.questionType = "checkbox";
+          break;
+        case 2:
+          this.questionType = "text";
+          break;
+        case 3:
+          this.questionType = "radio";
+          break;
+      }
+    },
     handleForm() {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
