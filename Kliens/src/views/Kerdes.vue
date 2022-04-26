@@ -7,6 +7,9 @@
           type="form"
           help="Kérdés beküldése"
           @submit="handleForm"
+          submit-label="Kérdés küldése"
+          v-model="formValues"
+          name="mainForm"
         >
           <FormKit
             v-model="value"
@@ -14,7 +17,40 @@
             label="Adja meg a kérdését"
             help="Irja be a kérdést!"
             validation="required|length:1,60"
+            name="question"
           />
+          <FormKit
+            v-model="customAnswers"
+            type="radio"
+            label="Szeretne modosítani az alap válaszokon?"
+            :options="['Alap', 'Checkbox', 'Szöveg', 'Rádió']"
+            name="questionType"
+          />
+          <Transition>
+            <div v-if="customAnswers == 'Checkbox' || customAnswers == 'Rádió'">
+              <div class="text-center">Adja meg a válasz lehetőségeket:</div>
+              <div class="buttons">
+                <div @click="answerCounter -= 1" class="btn btn-danger">-1</div>
+                <div @click="answerCounter += 1" class="btn btn-success">
+                  +1
+                </div>
+              </div>
+
+              <div
+                v-for="index in answerCounter"
+                :key="index"
+                class="form-margin-top"
+              >
+                <FormKit
+                  :key="index"
+                  type="text"
+                  label=""
+                  :help="index + ' válasz lehetőség'"
+                  :name="'answer_' + index"
+                />
+              </div>
+            </div>
+          </Transition>
         </FormKit>
       </div>
     </Transition>
@@ -44,6 +80,7 @@
 import { PushData } from "../utils/fetchdata";
 import "../assets/transition.css";
 import "../assets/loading.css";
+import "bootstrap";
 
 export default {
   props: ["formId"],
@@ -56,6 +93,9 @@ export default {
       showSuccesfullMessage: false,
       showErrorMessage: false,
       formId: 0,
+      customAnswers: "Alap",
+      answerCounter: 0,
+      formValues: null,
     };
   },
   async created() {
@@ -64,12 +104,42 @@ export default {
     }, 500);
   },
   methods: {
+    GetAnswers() {
+      let answers = [];
+      for (let index = 1; index <= this.answerCounter; index++) {
+        const element = this.formValues["answer_" + index];
+        console.log(element, index, this.answerCounter);
+        answers.push(element);
+      }
+      return [answers.join(", ")];
+    },
     handleForm() {
+      if (this.value.length == 0) {
+        return;
+      }
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
+      let questionType = 0;
+      switch (this.customAnswers) {
+        case "Checkbox":
+          questionType = 1;
+          break;
+        case "Szöveg":
+          questionType = 2;
+          break;
+        case "Rádió":
+          questionType = 3;
+          break;
+        default:
+          questionType = 0;
+          break;
+      }
+      let answers = this.GetAnswers();
+      console.log(answers);
       var raw = JSON.stringify({
         questions: [this.value],
-        questionTypes: [],
+        questionTypes: [questionType],
+        answers,
       });
 
       var requestOptions = {
@@ -121,4 +191,14 @@ export default {
     justify-content: center;
   }
 }
+.form-margin-top {
+  margin-top: 1rem;
+}
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+}
+</style>
+<style scoped src="bootstrap/dist/css/bootstrap.min.css">
 </style>
