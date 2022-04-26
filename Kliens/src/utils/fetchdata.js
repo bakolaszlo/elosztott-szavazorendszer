@@ -9,7 +9,9 @@ export async function GetData(params) {
   return data;
 }
 
-export function PushData(params) {}
+export function PushData(params) {
+  return fetch(api + "Forms", params);
+}
 
 export function DeleteData(params) {}
 

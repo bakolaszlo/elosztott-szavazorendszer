@@ -10,6 +10,7 @@ import HelloWorld from "@/components/HelloWorld.vue";
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/eredmenyek">Eredmények</RouterLink>
         <RouterLink to="/szavazz">Szavazz!</RouterLink>
+        <RouterLink to="/kerdes">Kérdés</RouterLink>
       </nav>
     </div>
   </header>

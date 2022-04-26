@@ -37,6 +37,11 @@ const router = createRouter({
       name: "szavazz",
       component: () => import("../views/Szavazz.vue"),
     },
+    {
+      path: "/kerdes",
+      name: "kerdes",
+      component: () => import("../views/Kerdes.vue"),
+    },
   ],
 });
 
